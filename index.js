@@ -1,3 +1,4 @@
+//The questions and answers for the app
 const questions = [
     {
         question: "Which is the largest animal in the world?",
@@ -37,13 +38,16 @@ const questions = [
     }
 ];
 
+//get elements by ID for DOM manipulation
 const questionElement = document.getElementById("question");
-const answerButton = document.getElementById("answer-buttons");
+const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
 
+//counters set to zero
 let currentQuestionIndex = 0;
 let score = 0;
 
+//
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
@@ -51,17 +55,18 @@ function startQuiz() {
     showQuestion();
 }
 
+//Show the question with the question number using the index + 1
 function showQuestion() {
     resetState();
     let currentQuestion = questions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
-
+//loop through the answers of the current question and display the text to a newly created button element, add the class btn and append it to answerButtons
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button");
         button.innerHTML = answer.text;
         button.classList.add("btn");
-        answerButton.appendChild(button);
+        answerButtons.appendChild(button);
         if(answer.correct) {
             button.dataset.correct = answer.correct;
         }
@@ -69,13 +74,17 @@ function showQuestion() {
     })
 }
 
+//Reset the state after clicking next so the next button does not show
 function resetState() {
     nextButton.style.display = "none";
-    while (answerButton.firstChild) {
-        answerButton.removeChild(answerButton.firstChild)
+    while (answerButtons.firstChild) {
+        answerButtons.removeChild(answerButtons.firstChild)
     }
 }
 
+//When selecting an answer, add the class "correct" if the answer is correct, add the class "incorrect" to the wrong answer, increment the score on correct answers,
+//disable the buttons, and display the "next" button.
+//the "correct" and "incorrect" classes are being added so the background color changes.
 function selectAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
@@ -85,7 +94,7 @@ function selectAnswer(e) {
     } else {
         selectedBtn.classList.add("incorrect");
     }
-    Array.from(answerButton.children).forEach(button => {
+    Array.from(answerButtons.children).forEach(button => {
         if(button.dataset.correct === "true") {
             button.classList.add("correct");
         }
@@ -94,6 +103,7 @@ function selectAnswer(e) {
     nextButton.style.display = "block";
 }
 
+//Show the score at the end of the quiz
 function showScore() {
     resetState();
     questionElement.innerHTML = `You scored ${score} out of ${questions.length}!`;
@@ -101,6 +111,7 @@ function showScore() {
     nextButton.style.display = "block";
 }
 
+//increment the currentQuestionIndex. If the currentQuestionIndex is less than the number of questions, show the question, otherwise show the score
 function handleNextButton() {
     currentQuestionIndex++;
     if(currentQuestionIndex < questions.length) {
@@ -110,6 +121,7 @@ function handleNextButton() {
     }
 }
 
+//if the currentQuestionIndex is less than the number of questions, call the handleNextButton function otherwise start the quiz
 nextButton.addEventListener("click", ()=> {
     if(currentQuestionIndex < questions.length) {
         handleNextButton();
@@ -118,4 +130,5 @@ nextButton.addEventListener("click", ()=> {
     }
 })
 
+//Display the quiz on the page. If this is not called, the page will only show the original HTML, none of the JS DOM manipulation
 startQuiz();

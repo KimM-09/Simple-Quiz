@@ -49,11 +49,13 @@ body {
     transition: all 0.3s;
 }
 
+/*When hovering over btn class items and it is not disabled, change the background and font color*/
 .btn:hover:not([disabled]) {
     background: #001e4d;
     color: #fff;
 }
 
+/*Change the cursor when the btn class is disabled*/
 .btn:disabled {
     cursor: no-drop;
 }
